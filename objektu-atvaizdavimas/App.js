@@ -1,7 +1,6 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text } from 'react-native';
 
-import VairuotojoKortele from './components/VairuotojoKortele';
+import VairuotojuFlatList from './components/VairuotojuFlatList';
 
 const vairuotojai = [
   {
@@ -42,31 +41,5 @@ const vairuotojai = [
 ];
 
 export default function App() {
-  return (
-    <ScrollView contentContainerStyle={styles.turinys}>
-      <Text style={styles.antraste}>Drift Masters 2026</Text>
-
-      {vairuotojai.map((vairuotojas) => (
-        <VairuotojoKortele
-          key={vairuotojas.id}
-          vardas={vairuotojas.vardas}
-          vieta={vairuotojas.vieta}
-          nuotrauka={vairuotojas.nuotrauka}
-        />
-      ))}
-    </ScrollView>
-  );
+  return <VairuotojuFlatList duomenys={vairuotojai} />;
 }
-
-const styles = StyleSheet.create({
-  turinys: {
-    padding: 20,
-    paddingTop: 50,
-    backgroundColor: '#f2f2f2',
-  },
-  antraste: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-});
