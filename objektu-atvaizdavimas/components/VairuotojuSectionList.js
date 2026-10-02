@@ -40,7 +40,7 @@ export default function VairuotojuSectionList({ sekcijos }) {
       contentContainerStyle={styles.turinys}
 
       // „false“ reiškia, kad sezono antraštė neprilips prie ekrano viršaus.
-      stickySectionHeadersEnabled={false}
+      // stickySectionHeadersEnabled={false}
     />
   );
 }
