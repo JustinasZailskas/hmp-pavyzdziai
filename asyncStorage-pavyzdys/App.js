@@ -10,250 +10,233 @@ import {
 import { createAsyncStorage } from '@react-native-async-storage/async-storage';
 
 const storage = createAsyncStorage('krepsinis');
-const SARASO_RAKTAS = 'krepsininkai';
-const SENAS_RAKTAS = 'krepsininkas';
+const PLAYERS_KEY = 'krepsininkai';
 
 export default function App() {
-  const [vardas, setVardas] = useState('');
-  const [pavarde, setPavarde] = useState('');
-  const [pozicija, setPozicija] = useState('');
-  const [komanda, setKomanda] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [position, setPosition] = useState('');
+  const [team, setTeam] = useState('');
 
-  const [krepsininkai, setKrepsininkai] = useState([]);
-  const [pranesimas, setPranesimas] = useState('');
-  const [kraunama, setKraunama] = useState(true);
-  const [saugoma, setSaugoma] = useState(false);
+  const [players, setPlayers] = useState([]);
+  const [message, setMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
-    async function ikeltiDuomenis() {
+    async function loadPlayers() {
       try {
-        const tekstas = await storage.getItem(SARASO_RAKTAS);
+        const storedText = await storage.getItem(PLAYERS_KEY);
 
-        if (tekstas !== null) {
-          setKrepsininkai(JSON.parse(tekstas));
-        } else {
-          // Perkeliame ankstesnio pavyzdžio žaidėją į sąrašą.
-          const senasTekstas = await storage.getItem(SENAS_RAKTAS);
+        if (storedText !== null) {
+          const savedPlayers = JSON.parse(storedText);
 
-          if (senasTekstas !== null) {
-            const zaidejas = {
-              ...JSON.parse(senasTekstas),
-              id: 'ankstesnis-zaidejas',
-            };
-
-            const sarasas = [zaidejas];
-
-            await storage.setItem(
-              SARASO_RAKTAS,
-              JSON.stringify(sarasas)
-            );
-
-            setKrepsininkai(sarasas);
-            await storage.removeItem(SENAS_RAKTAS);
+          if (!Array.isArray(savedPlayers)) {
+            throw new Error('Išsaugoti duomenys nėra krepšininkų sąrašas.');
           }
+
+          setPlayers(savedPlayers);
         }
-      } catch (klaida) {
-        console.error(klaida);
-        setPranesimas('Nepavyko įkelti žaidėjų.');
+      } catch (error) {
+        console.error(error);
+        setMessage('Nepavyko įkelti žaidėjų.');
       } finally {
-        setKraunama(false);
+        setIsLoading(false);
       }
     }
 
-    ikeltiDuomenis();
+    loadPlayers();
   }, []);
 
-  async function pridetiZaideja() {
-    if (saugoma) return;
+  async function addPlayer() {
+    if (isSaving) return;
 
     if (
-      !vardas.trim() ||
-      !pavarde.trim() ||
-      !pozicija.trim() ||
-      !komanda.trim()
+      !firstName.trim() ||
+      !lastName.trim() ||
+      !position.trim() ||
+      !team.trim()
     ) {
-      setPranesimas('Užpildykite visus laukus.');
+      setMessage('Užpildykite visus laukus.');
       return;
     }
 
-    const naujasZaidejas = {
+    const newPlayer = {
       id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
-      vardas: vardas.trim(),
-      pavarde: pavarde.trim(),
-      pozicija: pozicija.trim(),
-      komanda: komanda.trim(),
+      'vardas': firstName.trim(),
+      'pavarde': lastName.trim(),
+      'pozicija': position.trim(),
+      'komanda': team.trim(),
     };
 
-    const naujasSarasas = [...krepsininkai, naujasZaidejas];
+    const updatedPlayers = [...players, newPlayer];
 
-    setSaugoma(true);
-    setPranesimas('');
+    setIsSaving(true);
+    setMessage('');
 
     try {
       await storage.setItem(
-        SARASO_RAKTAS,
-        JSON.stringify(naujasSarasas)
+        PLAYERS_KEY,
+        JSON.stringify(updatedPlayers)
       );
 
-      setKrepsininkai(naujasSarasas);
+      setPlayers(updatedPlayers);
 
       // Išvalome formą, kad būtų galima pridėti kitą žaidėją.
-      setVardas('');
-      setPavarde('');
-      setPozicija('');
-      setKomanda('');
+      setFirstName('');
+      setLastName('');
+      setPosition('');
+      setTeam('');
 
-      setPranesimas('Žaidėjas pridėtas.');
-    } catch (klaida) {
-      console.error(klaida);
-      setPranesimas('Nepavyko pridėti žaidėjo.');
+      setMessage('Žaidėjas pridėtas.');
+    } catch (error) {
+      console.error(error);
+      setMessage('Nepavyko pridėti žaidėjo.');
     } finally {
-      setSaugoma(false);
+      setIsSaving(false);
     }
   }
 
-  async function pasalintiZaideja(id) {
-    if (saugoma) return;
+  async function removePlayer(id) {
+    if (isSaving) return;
 
     // Paliekame visus žaidėjus, išskyrus pasirinktą.
-    const naujasSarasas = krepsininkai.filter(
-      (zaidejas) => zaidejas.id !== id
+    const updatedPlayers = players.filter(
+      (player) => player.id !== id
     );
 
-    setSaugoma(true);
-    setPranesimas('');
+    setIsSaving(true);
+    setMessage('');
 
     try {
       // Išsaugome sąrašą be pašalinto žaidėjo.
       await storage.setItem(
-        SARASO_RAKTAS,
-        JSON.stringify(naujasSarasas)
+        PLAYERS_KEY,
+        JSON.stringify(updatedPlayers)
       );
 
-      setKrepsininkai(naujasSarasas);
-      setPranesimas('Žaidėjas pašalintas.');
-    } catch (klaida) {
-      console.error(klaida);
-      setPranesimas('Nepavyko pašalinti žaidėjo.');
+      setPlayers(updatedPlayers);
+      setMessage('Žaidėjas pašalintas.');
+    } catch (error) {
+      console.error(error);
+      setMessage('Nepavyko pašalinti žaidėjo.');
     } finally {
-      setSaugoma(false);
+      setIsSaving(false);
     }
   }
-  async function pasalintiVisusZaidejus() {
-    if (saugoma) return;
 
-    setSaugoma(true);
-    setPranesimas('');
+  async function removeAllPlayers() {
+    if (isSaving) return;
+
+    setIsSaving(true);
+    setMessage('');
 
     try {
       // Pašaliname visą išsaugotą sąrašą.
-      await storage.removeItem(SARASO_RAKTAS);
-
-      // Pašaliname seno pavyzdžio įrašą, kad jis nebūtų atkurtas.
-      await storage.removeItem(SENAS_RAKTAS);
+      await storage.removeItem(PLAYERS_KEY);
 
       // Išvalome ekrane rodomą sąrašą.
-      setKrepsininkai([]);
-      setPranesimas('Visi krepšininkai pašalinti.');
-    } catch (klaida) {
-      console.error(klaida);
-      setPranesimas('Nepavyko pašalinti visų krepšininkų.');
+      setPlayers([]);
+      setMessage('Visi krepšininkai pašalinti.');
+    } catch (error) {
+      console.error(error);
+      setMessage('Nepavyko pašalinti visų krepšininkų.');
     } finally {
-      setSaugoma(false);
+      setIsSaving(false);
     }
   }
 
   return (
     <ScrollView
-      style={styles.ekranas}
-      contentContainerStyle={styles.turinys}
+      style={styles.screen}
+      contentContainerStyle={styles.content}
       keyboardShouldPersistTaps="handled"
     >
-      <Text style={styles.antraste}>Krepšininkų sąrašas</Text>
+      <Text style={styles.heading}>Krepšininkų sąrašas</Text>
 
-      {kraunama ? (
+      {isLoading ? (
         <Text>Įkeliami duomenys...</Text>
       ) : (
         <>
-          <Text style={styles.uzrasas}>Vardas</Text>
+          <Text style={styles.label}>Vardas</Text>
           <TextInput
-            style={styles.laukas}
-            value={vardas}
-            onChangeText={setVardas}
+            style={styles.input}
+            value={firstName}
+            onChangeText={setFirstName}
             placeholder="Jonas"
-            editable={!saugoma}
+            editable={!isSaving}
           />
 
-          <Text style={styles.uzrasas}>Pavardė</Text>
+          <Text style={styles.label}>Pavardė</Text>
           <TextInput
-            style={styles.laukas}
-            value={pavarde}
-            onChangeText={setPavarde}
+            style={styles.input}
+            value={lastName}
+            onChangeText={setLastName}
             placeholder="Jonaitis"
-            editable={!saugoma}
+            editable={!isSaving}
           />
 
-          <Text style={styles.uzrasas}>Pozicija</Text>
+          <Text style={styles.label}>Pozicija</Text>
           <TextInput
-            style={styles.laukas}
-            value={pozicija}
-            onChangeText={setPozicija}
+            style={styles.input}
+            value={position}
+            onChangeText={setPosition}
             placeholder="Įžaidėjas"
-            editable={!saugoma}
+            editable={!isSaving}
           />
 
-          <Text style={styles.uzrasas}>Komanda</Text>
+          <Text style={styles.label}>Komanda</Text>
           <TextInput
-            style={styles.laukas}
-            value={komanda}
-            onChangeText={setKomanda}
+            style={styles.input}
+            value={team}
+            onChangeText={setTeam}
             placeholder="Žalgiris"
-            editable={!saugoma}
+            editable={!isSaving}
           />
 
           <Button
             title="Pridėti žaidėją"
-            onPress={pridetiZaideja}
-            disabled={saugoma}
+            onPress={addPlayer}
+            disabled={isSaving}
           />
 
-          <Text style={styles.pranesimas}>{pranesimas}</Text>
+          <Text style={styles.message}>{message}</Text>
 
-          <Text style={styles.paantraste}>
-            Išsaugoti žaidėjai ({krepsininkai.length})
+          <Text style={styles.subheading}>
+            Išsaugoti žaidėjai ({players.length})
           </Text>
           <View style={{ marginBottom: 16 }}>
             <Button
               title="Pašalinti visus krepšininkus"
               color="#c62828"
-              onPress={pasalintiVisusZaidejus}
-              disabled={saugoma || krepsininkai.length === 0}
+              onPress={removeAllPlayers}
+              disabled={isSaving || players.length === 0}
             />
           </View>
 
-          {krepsininkai.length === 0 ? (
+          {players.length === 0 ? (
             <Text>Sąrašas tuščias.</Text>
           ) : (
-            krepsininkai.map((zaidejas) => (
-              <View key={zaidejas.id} style={styles.kortele}>
-                <Text style={styles.vardas}>
-                  {zaidejas.vardas} {zaidejas.pavarde}
+            players.map((player) => (
+              <View key={player.id} style={styles.card}>
+                <Text style={styles.playerName}>
+                  {player['vardas']} {player['pavarde']}
                 </Text>
 
-                <Text style={styles.detale}>
-                  Pozicija: {zaidejas.pozicija}
+                <Text style={styles.detail}>
+                  Pozicija: {player['pozicija']}
                 </Text>
 
-                <Text style={styles.detale}>
-                  Komanda: {zaidejas.komanda}
+                <Text style={styles.detail}>
+                  Komanda: {player['komanda']}
                 </Text>
 
-                <View style={styles.mygtukas}>
+                <View style={styles.button}>
                   <Button
                     title="Pašalinti"
                     color="#c62828"
-                    onPress={() => pasalintiZaideja(zaidejas.id)}
-                    disabled={saugoma}
+                    onPress={() => removePlayer(player.id)}
+                    disabled={isSaving}
                   />
                 </View>
               </View>
@@ -266,26 +249,26 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  ekranas: {
+  screen: {
     flex: 1,
     backgroundColor: '#f2f2f2',
   },
-  turinys: {
+  content: {
     padding: 20,
     paddingTop: 60,
     paddingBottom: 40,
   },
-  antraste: {
+  heading: {
     fontSize: 26,
     fontWeight: 'bold',
     marginBottom: 24,
   },
-  uzrasas: {
+  label: {
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 6,
   },
-  laukas: {
+  input: {
     backgroundColor: '#ffffff',
     borderWidth: 1,
     borderColor: '#cccccc',
@@ -294,32 +277,32 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 18,
   },
-  pranesimas: {
+  message: {
     marginTop: 12,
     fontSize: 16,
   },
-  paantraste: {
+  subheading: {
     fontSize: 20,
     fontWeight: 'bold',
     marginTop: 24,
     marginBottom: 12,
   },
-  kortele: {
+  card: {
     backgroundColor: '#ffffff',
     borderRadius: 12,
     padding: 20,
     marginBottom: 12,
   },
-  vardas: {
+  playerName: {
     fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 8,
   },
-  detale: {
+  detail: {
     fontSize: 16,
     marginTop: 4,
   },
-  mygtukas: {
+  button: {
     marginTop: 16,
   },
 });
