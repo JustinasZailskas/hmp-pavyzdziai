@@ -4,7 +4,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import HomeScreen from './screens/HomeScreen';
 import UseRefExample from './screens/UseRefExample';
-import FadeInExample from './screens/FadeInExample';
+import FirstAnimationExampleUseRef from './screens/firstAnimationExampleUseRef';
+import SecondAnimationExampleTiming from './screens/secondAnimationExampleTiming';
+import ThirdAnimationExampleSpring from './screens/thirdAnimationExampleSpring';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,9 +36,19 @@ export default function App() {
           options={{ title: 'useState ir useRef' }}
         />
         <Stack.Screen
-          name="FadeInExample"
-          component={FadeInExample}
+          name="FirstAnimationExampleUseRef"
+          component={FirstAnimationExampleUseRef}
           options={{ title: 'FadeIn su useRef' }}
+        />
+        <Stack.Screen
+          name="SecondAnimationExampleTiming"
+          component={SecondAnimationExampleTiming}
+          options={{ title: 'Antra animacija: timing' }}
+        />
+        <Stack.Screen
+          name="ThirdAnimationExampleSpring"
+          component={ThirdAnimationExampleSpring}
+          options={{ title: 'Trečia animacija: spring' }}
         />
       </Stack.Navigator>
     </NavigationContainer>

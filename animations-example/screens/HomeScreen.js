@@ -25,11 +25,27 @@ export default function HomeScreen({ navigation }) {
       </Pressable>
 
       <Pressable
-        onPress={() => navigation.navigate('FadeInExample')}
+        onPress={() => navigation.navigate('FirstAnimationExampleUseRef')}
         style={{ marginTop: 20 }}
       >
         <Text style={styles.exampleTitle}>2. FadeIn su useRef</Text>
         <Text style={styles.exampleDescription}>Tekstas palaipsniui pasirodo per 1 sekundę</Text>
+      </Pressable>
+
+      <Pressable
+        onPress={() => navigation.navigate('SecondAnimationExampleTiming')}
+        style={{ marginTop: 20 }}
+      >
+        <Text style={styles.exampleTitle}>3. Animated.timing</Text>
+        <Text style={styles.exampleDescription}>Kvadrato marginTop keičiasi nuo 20 iki 200</Text>
+      </Pressable>
+
+      <Pressable
+        onPress={() => navigation.navigate('ThirdAnimationExampleSpring')}
+        style={{ marginTop: 20 }}
+      >
+        <Text style={styles.exampleTitle}>4. Animated.spring</Text>
+        <Text style={styles.exampleDescription}>Palyginame friction: 4 ir friction: 20</Text>
       </Pressable>
     </View>
   );
