@@ -12,6 +12,7 @@ import FifthAnimationExampleComposition from './screens/fifthAnimationExampleCom
 import SixthAnimationExampleInterpolation from './screens/sixthAnimationExampleInterpolation';
 import SeventhAnimationExampleTracking from './screens/seventhAnimationExampleTracking';
 import EighthAnimationExampleGestureTracking from './screens/eighthAnimationExampleGestureTracking';
+import NinthAnimationExampleCurrentValue from './screens/ninthAnimationExampleCurrentValue';
 
 const Stack = createNativeStackNavigator();
 
@@ -79,6 +80,11 @@ export default function App() {
           name="EighthAnimationExampleGestureTracking"
           component={EighthAnimationExampleGestureTracking}
           options={{ title: 'Gestų sekimas: Animated.event' }}
+        />
+        <Stack.Screen
+          name="NinthAnimationExampleCurrentValue"
+          component={NinthAnimationExampleCurrentValue}
+          options={{ title: 'Atsakas į dabartinę reikšmę' }}
         />
       </Stack.Navigator>
     </NavigationContainer>

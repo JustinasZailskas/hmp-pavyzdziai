@@ -87,6 +87,14 @@ export default function HomeScreen({ navigation }) {
         <Text style={styles.exampleTitle}>9. Gestų sekimas: Animated.event</Text>
         <Text style={styles.exampleDescription}>Kvadrato tempimas su PanResponder</Text>
       </Pressable>
+
+      <Pressable
+        onPress={() => navigation.navigate('NinthAnimationExampleCurrentValue')}
+        style={{ marginTop: 20 }}
+      >
+        <Text style={styles.exampleTitle}>10. Atsakas į dabartinę reikšmę</Text>
+        <Text style={styles.exampleDescription}>addListener ir stopAnimation</Text>
+      </Pressable>
     </ScrollView>
   );
 }
