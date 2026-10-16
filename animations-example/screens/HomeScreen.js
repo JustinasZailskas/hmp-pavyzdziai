@@ -1,14 +1,14 @@
 import React from 'react';
 import {
   Pressable,
-  View,
+  ScrollView,
   Text,
   StyleSheet,
 } from 'react-native';
 
 export default function HomeScreen({ navigation }) {
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>
         Animacijų pavyzdžiai
       </Text>
@@ -55,7 +55,15 @@ export default function HomeScreen({ navigation }) {
         <Text style={styles.exampleTitle}>5. Animated.decay — inercija</Text>
         <Text style={styles.exampleDescription}>Kvadratas slysta į dešinę ir palaipsniui sustoja</Text>
       </Pressable>
-    </View>
+
+      <Pressable
+        onPress={() => navigation.navigate('FifthAnimationExampleComposition')}
+        style={{ marginTop: 20 }}
+      >
+        <Text style={styles.exampleTitle}>6. Animacijų komponavimas</Text>
+        <Text style={styles.exampleDescription}>sequence → delay → parallel</Text>
+      </Pressable>
+    </ScrollView>
   );
 }
 
@@ -71,7 +79,7 @@ const styles = StyleSheet.create({
   exampleTitle: { fontSize: 18, fontWeight: '600', color: '#0b5cab' },
   exampleDescription: { fontSize: 14, color: '#6b7280', marginTop: 6 },
   container: {
-    flex: 1,
+    flexGrow: 1,
     padding: 20,
     backgroundColor: '#f9fafb',
   },
