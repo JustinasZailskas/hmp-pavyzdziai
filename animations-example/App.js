@@ -11,6 +11,7 @@ import FourthAnimationExampleDecay from './screens/fourthAnimationExampleDecay';
 import FifthAnimationExampleComposition from './screens/fifthAnimationExampleComposition';
 import SixthAnimationExampleInterpolation from './screens/sixthAnimationExampleInterpolation';
 import SeventhAnimationExampleTracking from './screens/seventhAnimationExampleTracking';
+import EighthAnimationExampleGestureTracking from './screens/eighthAnimationExampleGestureTracking';
 
 const Stack = createNativeStackNavigator();
 
@@ -73,6 +74,11 @@ export default function App() {
           name="SeventhAnimationExampleTracking"
           component={SeventhAnimationExampleTracking}
           options={{ title: 'Dinaminių reikšmių sekimas' }}
+        />
+        <Stack.Screen
+          name="EighthAnimationExampleGestureTracking"
+          component={EighthAnimationExampleGestureTracking}
+          options={{ title: 'Gestų sekimas: Animated.event' }}
         />
       </Stack.Navigator>
     </NavigationContainer>

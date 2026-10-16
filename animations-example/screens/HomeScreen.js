@@ -79,6 +79,14 @@ export default function HomeScreen({ navigation }) {
         <Text style={styles.exampleTitle}>8. Dinaminių reikšmių sekimas</Text>
         <Text style={styles.exampleDescription}>Sekantys apskritimai ir nuo pozicijos priklausantis opacity</Text>
       </Pressable>
+
+      <Pressable
+        onPress={() => navigation.navigate('EighthAnimationExampleGestureTracking')}
+        style={{ marginTop: 20 }}
+      >
+        <Text style={styles.exampleTitle}>9. Gestų sekimas: Animated.event</Text>
+        <Text style={styles.exampleDescription}>Kvadrato tempimas su PanResponder</Text>
+      </Pressable>
     </ScrollView>
   );
 }
