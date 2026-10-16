@@ -47,6 +47,14 @@ export default function HomeScreen({ navigation }) {
         <Text style={styles.exampleTitle}>4. Animated.spring</Text>
         <Text style={styles.exampleDescription}>Palyginame friction: 4 ir friction: 20</Text>
       </Pressable>
+
+      <Pressable
+        onPress={() => navigation.navigate('FourthAnimationExampleDecay')}
+        style={{ marginTop: 20 }}
+      >
+        <Text style={styles.exampleTitle}>5. Animated.decay — inercija</Text>
+        <Text style={styles.exampleDescription}>Kvadratas slysta į dešinę ir palaipsniui sustoja</Text>
+      </Pressable>
     </View>
   );
 }

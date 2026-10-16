@@ -7,6 +7,7 @@ import UseRefExample from './screens/UseRefExample';
 import FirstAnimationExampleUseRef from './screens/firstAnimationExampleUseRef';
 import SecondAnimationExampleTiming from './screens/secondAnimationExampleTiming';
 import ThirdAnimationExampleSpring from './screens/thirdAnimationExampleSpring';
+import FourthAnimationExampleDecay from './screens/fourthAnimationExampleDecay';
 
 const Stack = createNativeStackNavigator();
 
@@ -49,6 +50,11 @@ export default function App() {
           name="ThirdAnimationExampleSpring"
           component={ThirdAnimationExampleSpring}
           options={{ title: 'Trečia animacija: spring' }}
+        />
+        <Stack.Screen
+          name="FourthAnimationExampleDecay"
+          component={FourthAnimationExampleDecay}
+          options={{ title: 'Ketvirta animacija: decay' }}
         />
       </Stack.Navigator>
     </NavigationContainer>
