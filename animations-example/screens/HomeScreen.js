@@ -71,6 +71,14 @@ export default function HomeScreen({ navigation }) {
         <Text style={styles.exampleTitle}>7. Interpoliacija</Text>
         <Text style={styles.exampleDescription}>Judėjimas, sukimasis ir extend / clamp</Text>
       </Pressable>
+
+      <Pressable
+        onPress={() => navigation.navigate('SeventhAnimationExampleTracking')}
+        style={{ marginTop: 20 }}
+      >
+        <Text style={styles.exampleTitle}>8. Dinaminių reikšmių sekimas</Text>
+        <Text style={styles.exampleDescription}>Sekantys apskritimai ir nuo pozicijos priklausantis opacity</Text>
+      </Pressable>
     </ScrollView>
   );
 }

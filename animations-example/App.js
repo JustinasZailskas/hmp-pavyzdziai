@@ -10,6 +10,7 @@ import ThirdAnimationExampleSpring from './screens/thirdAnimationExampleSpring';
 import FourthAnimationExampleDecay from './screens/fourthAnimationExampleDecay';
 import FifthAnimationExampleComposition from './screens/fifthAnimationExampleComposition';
 import SixthAnimationExampleInterpolation from './screens/sixthAnimationExampleInterpolation';
+import SeventhAnimationExampleTracking from './screens/seventhAnimationExampleTracking';
 
 const Stack = createNativeStackNavigator();
 
@@ -67,6 +68,11 @@ export default function App() {
           name="SixthAnimationExampleInterpolation"
           component={SixthAnimationExampleInterpolation}
           options={{ title: 'Šešta animacija: interpoliacija' }}
+        />
+        <Stack.Screen
+          name="SeventhAnimationExampleTracking"
+          component={SeventhAnimationExampleTracking}
+          options={{ title: 'Dinaminių reikšmių sekimas' }}
         />
       </Stack.Navigator>
     </NavigationContainer>
