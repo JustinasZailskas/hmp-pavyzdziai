@@ -1,7 +1,7 @@
 /* Animated.Value ir interpolate aprašo animacijos mazgus, perduodamus Animated.View. */
 /* eslint-disable react-hooks/refs */
 import { useRef, useState } from 'react';
-import { Animated, Button, Text, View } from 'react-native';
+import { Animated, Button, ScrollView, Text, View } from 'react-native';
 
 export default function FifthAnimationExampleComposition() {
   const opacity = useRef(new Animated.Value(0)).current;
@@ -42,7 +42,7 @@ export default function FifthAnimationExampleComposition() {
   }
 
   return (
-    <View style={{ flex: 1, padding: 20, gap: 20 }}>
+    <ScrollView contentContainerStyle={{ padding: 20, gap: 20 }}>
       <Button title="Start Animation" onPress={animate} disabled={isAnimating} />
       <Text>Pasirodo → pauzė → didėja + sukasi</Text>
       <View style={{ height: 200, alignItems: 'center', justifyContent: 'center' }}>
@@ -54,6 +54,45 @@ export default function FifthAnimationExampleComposition() {
           transform: [{ scale }, { rotate: rotation }],
         }} />
       </View>
+      <DivideExample />
+    </ScrollView>
+  );
+}
+
+function DivideExample() {
+  const a = useRef(new Animated.Value(1)).current;
+  const b = Animated.divide(1, a);
+
+  function animate() {
+    a.setValue(1);
+    Animated.timing(a, {
+      toValue: 2,
+      duration: 1500,
+      useNativeDriver: true,
+    }).start();
+  }
+
+  return (
+    <View style={{ gap: 20 }}>
+      <Text>Animated.divide(1, a): tekstas išlieka to paties dydžio</Text>
+      <Button title="Animate Scale" onPress={animate} />
+      <View style={{ height: 240, alignItems: 'center', justifyContent: 'center' }}>
+        <Animated.View style={{
+          width: 100,
+          height: 100,
+          borderRadius: 50,
+          backgroundColor: '#0077b6',
+          alignItems: 'center',
+          justifyContent: 'center',
+          transform: [{ scale: a }],
+        }}>
+          {/* Tėvo mastelis a ir teksto mastelis 1 / a vienas kitą kompensuoja. */}
+          <Animated.Text style={{ color: 'white', transform: [{ scale: b }] }}>
+            Tekstas
+          </Animated.Text>
+        </Animated.View>
+      </View>
+      <Text>Apskritimas: a = 1 → 2. Tekstas: b = 1 / a.</Text>
     </View>
   );
 }
