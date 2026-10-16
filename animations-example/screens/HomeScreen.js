@@ -63,6 +63,14 @@ export default function HomeScreen({ navigation }) {
         <Text style={styles.exampleTitle}>6. Animacijų komponavimas</Text>
         <Text style={styles.exampleDescription}>sequence → delay → parallel</Text>
       </Pressable>
+
+      <Pressable
+        onPress={() => navigation.navigate('SixthAnimationExampleInterpolation')}
+        style={{ marginTop: 20 }}
+      >
+        <Text style={styles.exampleTitle}>7. Interpoliacija</Text>
+        <Text style={styles.exampleDescription}>Judėjimas, sukimasis ir extend / clamp</Text>
+      </Pressable>
     </ScrollView>
   );
 }
